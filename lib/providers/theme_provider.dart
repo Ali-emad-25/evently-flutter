@@ -11,9 +11,5 @@ class ThemeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool isDark() {
-    return themeMode == ThemeMode.dark;
-  }
-
   bool get isDarkMode => themeMode == ThemeMode.dark;
 }
