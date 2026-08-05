@@ -1,0 +1,99 @@
+import 'package:evently/providers/theme_provider.dart';
+import 'package:evently/ui/home/tabs/profile_tab/widgets/tile_list_widget.dart';
+import 'package:evently/utils/app_assets.dart';
+import 'package:evently/utils/app_colors.dart';
+import 'package:evently/utils/size_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'widgets/language_bottom_sheet.dart';
+
+class ProfileTab extends StatefulWidget {
+  const ProfileTab({super.key});
+
+  @override
+  State<ProfileTab> createState() => _ProfileTabState();
+}
+
+class _ProfileTabState extends State<ProfileTab> {
+  @override
+  Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+    return Padding(
+      padding: EdgeInsets.only(
+        top: context.height * 0.075,
+        right: context.width * 0.04,
+        left: context.width * 0.04,
+      ),
+      child: Column(
+        spacing: context.height * 0.018,
+        children: [
+          CircleAvatar(
+            radius: 50,
+            backgroundImage: AssetImage(AppAssets.profileImage),
+          ),
+          Column(
+            spacing: context.height * 0.006,
+            children: [
+              Text(
+                'Ali Emad',
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
+              Text(
+                'aliemad25@gmail.com',
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+            ],
+          ),
+          SizedBox(height: context.height * 0.012),
+          TileListWidget(
+            title: 'darkMode',
+            widget: Switch(
+              trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
+              inactiveThumbColor: AppColors.whiteColor,
+              inactiveTrackColor: AppColors.grayColor,
+              activeTrackColor: AppColors.mainDarkModeColor,
+              value: themeProvider.isDarkMode,
+              onChanged: (isDarkMode) {
+                if (isDarkMode) {
+                  themeProvider.changeTheme(ThemeMode.dark);
+                } else {
+                  themeProvider.changeTheme(ThemeMode.light);
+                }
+                setState(() {});
+              },
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              showLanguageBottomSheet();
+            },
+            child: TileListWidget(
+              title: 'language',
+              widget: Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              //   todo: logout
+            },
+            child: TileListWidget(
+              title: 'logout',
+              widget: Icon(Icons.logout, color: AppColors.redColor),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void showLanguageBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => LanguageBottomSheet(),
+    );
+  }
+}
