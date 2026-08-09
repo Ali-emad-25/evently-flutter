@@ -43,5 +43,12 @@
   "login_google": "Login with Google",
   "signup_google": "Sign up with Google",
   "forget_screen_title": "Forget Password",
-  "reset_password": "Reset password"
+  "reset_password": "Reset password",
+  "login_successfully": "Login successfully.",
+  "added_successfully": "The account has been successfully added.",
+  "ok": "Ok",
+  "error": "Error",
+  "no_user_found": "The email or password is incorrect.",
+  "account_exists": "The account already exists for that email.",
+  "loading": "Loading..."
 }
