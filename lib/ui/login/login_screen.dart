@@ -8,11 +8,17 @@ import 'package:evently/ui/onboarding/widgets/main_btn.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_routes.dart';
+import 'package:evently/utils/dialog_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  var formKey = GlobalKey<FormState>();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +38,7 @@ class LoginScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ).tr(),
               Form(
+                key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   spacing: 15,
@@ -40,12 +47,39 @@ class LoginScreen extends StatelessWidget {
                       hintText: 'email_hint',
                       prefixIcon: AppAssets.emailIcon,
                       textInputType: TextInputType.emailAddress,
+                      controller: emailController,
+                      validator: (text) {
+                        if (text == null || text
+                            .trim()
+                            .isEmpty) {
+                          return "Please enter email.";
+                        }
+                        final bool emailValid = RegExp(
+                          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                        ).hasMatch(emailController.text);
+                        if (!emailValid) {
+                          return "Please enter valid email";
+                        }
+                        return null;
+                      },
                     ),
                     TextFieldWidget(
                       hintText: 'password_hint',
                       prefixIcon: AppAssets.passwordIcon,
                       textInputType: TextInputType.emailAddress,
                       isPasswordField: true,
+                      controller: passwordController,
+                      validator: (text) {
+                        if (text == null || text
+                            .trim()
+                            .isEmpty) {
+                          return "Please enter password.";
+                        }
+                        if (text.length < 6) {
+                          return "Password must be at least 6 chars.";
+                        }
+                        return null;
+                      },
                     ),
                     TextButtonWidget(
                       text: 'forget_password',
@@ -60,7 +94,12 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              MainBtn(text: 'login', onPressed: () {}),
+              MainBtn(
+                text: 'login',
+                onPressed: () {
+                  login(context);
+                },
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 5,
@@ -109,5 +148,52 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void login(BuildContext context) async {
+    if (formKey.currentState?.validate() == true) {
+      try {
+        DialogUtils.showLoading(context: context, text: 'loading');
+        await Future.delayed(Duration(seconds: 2));
+        final credential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        DialogUtils.hideLoading(context: context);
+        DialogUtils.showMessage(
+          context: context,
+          content: 'login_successfully',
+          title: 'login',
+          posActionsName: 'ok',
+          posAction: () {
+            Navigator.pushReplacementNamed(
+              context,
+              AppRoutes.homeRouteName,
+            );
+          },
+        );
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'invalid-credential') {
+          DialogUtils.hideLoading(context: context);
+          DialogUtils.showMessage(
+            context: context,
+            content: 'no_user_found',
+            title: 'error',
+            posActionsName: 'ok',
+            isError: true,
+          );
+        }
+      } catch (e) {
+        DialogUtils.hideLoading(context: context);
+        DialogUtils.showMessage(
+          context: context,
+          content: '$e',
+          title: 'error',
+          posActionsName: 'ok',
+          isError: true,
+        );
+      }
+    }
   }
 }

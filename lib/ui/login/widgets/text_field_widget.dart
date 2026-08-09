@@ -2,18 +2,23 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
+typedef OnValidator = String? Function(String?)?;
+
 class TextFieldWidget extends StatefulWidget {
   String hintText;
   String prefixIcon;
   bool isPasswordField;
   TextInputType textInputType;
-
+  TextEditingController? controller;
+  OnValidator? validator;
   TextFieldWidget({
     super.key,
     required this.hintText,
     required this.prefixIcon,
     this.textInputType = TextInputType.text,
     this.isPasswordField = false,
+    this.controller,
+    this.validator,
   });
 
   @override
@@ -26,6 +31,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: widget.controller,
       obscureText: widget.isPasswordField ? obscure : false,
       keyboardType: widget.textInputType,
       style: Theme.of(context).textTheme.headlineMedium,
@@ -35,20 +41,14 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         fillColor: Theme.of(context).cardColor,
         hintText: widget.hintText.tr(),
         hintStyle: Theme.of(context).textTheme.labelMedium,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(
-            color: Theme.of(context).dividerColor,
-            width: 1,
-          ),
+        enabledBorder: buildOutlineInputBorder(
+          color: Theme.of(context).dividerColor,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide(
-            color: Theme.of(context).primaryColor,
-            width: 1,
-          ),
+        focusedBorder: buildOutlineInputBorder(
+          color: Theme.of(context).primaryColor,
         ),
+        errorBorder: buildOutlineInputBorder(color: AppColors.redColor),
+        focusedErrorBorder: buildOutlineInputBorder(color: AppColors.redColor),
         prefixIcon: Image.asset(widget.prefixIcon),
         suffixIcon: widget.isPasswordField == true
             ? IconButton(
@@ -65,6 +65,14 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
               )
             : SizedBox(),
       ),
+      validator: widget.validator,
+    );
+  }
+
+  OutlineInputBorder buildOutlineInputBorder({required Color color}) {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(20),
+      borderSide: BorderSide(color: color, width: 1),
     );
   }
 }

@@ -43,5 +43,12 @@
   "login_google": "تسجيل الدخول باستخدام Google",
   "signup_google": "إنشاء حساب باستخدام Google",
   "forget_screen_title": "نسيت كلمة المرور",
-  "reset_password": "إعادة تعيين كلمة المرور"
+  "reset_password": "إعادة تعيين كلمة المرور",
+  "login_successfully": "تم تسجيل الدخول بنجاح.",
+  "added_successfully": "تم إنشاء الحساب بنجاح.",
+  "ok": "حسنًا",
+  "error": "خطأ",
+  "no_user_found": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+  "account_exists": "يوجد حساب مسجل بالفعل باستخدام هذا البريد الإلكتروني.",
+  "loading": "جاري التحميل..."
 }

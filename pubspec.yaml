@@ -39,6 +39,8 @@ dependencies:
   provider: ^6.1.5+1
   introduction_screen: ^4.0.0
   smooth_page_indicator: ^2.0.1
+  firebase_core: ^4.13.0
+  firebase_auth: ^6.5.7
 
 dev_dependencies:
   flutter_test:
