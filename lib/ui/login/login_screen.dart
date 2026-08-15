@@ -1,5 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:evently/auth_service.dart';
+import 'package:evently/firebase_utils.dart';
 import 'package:evently/providers/theme_provider.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/ui/login/widgets/google_btn.dart';
 import 'package:evently/ui/login/widgets/text_button_widget.dart';
 import 'package:evently/ui/login/widgets/text_field_widget.dart';
@@ -9,6 +12,8 @@ import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
 import 'package:evently/utils/app_routes.dart';
 import 'package:evently/utils/dialog_utils.dart';
+import 'package:evently/utils/size_utils.dart';
+import 'package:evently/utils/toast_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,13 +31,13 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: LogoWidget(), centerTitle: true),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: context.width * 0.043),
         child: SingleChildScrollView(
           child: Column(
-            spacing: 20,
+            spacing: context.height * 0.025,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
+              SizedBox(height: context.height * 0.025),
               Text(
                 'login_title',
                 style: Theme.of(context).textTheme.titleLarge,
@@ -41,17 +46,15 @@ class LoginScreen extends StatelessWidget {
                 key: formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  spacing: 15,
+                  spacing: context.height * 0.02,
                   children: [
                     TextFieldWidget(
                       hintText: 'email_hint',
-                      prefixIcon: AppAssets.emailIcon,
+                      prefixIcon: Image.asset(AppAssets.emailIcon),
                       textInputType: TextInputType.emailAddress,
                       controller: emailController,
                       validator: (text) {
-                        if (text == null || text
-                            .trim()
-                            .isEmpty) {
+                        if (text == null || text.trim().isEmpty) {
                           return "Please enter email.";
                         }
                         final bool emailValid = RegExp(
@@ -65,14 +68,12 @@ class LoginScreen extends StatelessWidget {
                     ),
                     TextFieldWidget(
                       hintText: 'password_hint',
-                      prefixIcon: AppAssets.passwordIcon,
+                      prefixIcon: Image.asset(AppAssets.passwordIcon),
                       textInputType: TextInputType.emailAddress,
                       isPasswordField: true,
                       controller: passwordController,
                       validator: (text) {
-                        if (text == null || text
-                            .trim()
-                            .isEmpty) {
+                        if (text == null || text.trim().isEmpty) {
                           return "Please enter password.";
                         }
                         if (text.length < 6) {
@@ -93,7 +94,7 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: context.height * 0.012),
               MainBtn(
                 text: 'login',
                 onPressed: () {
@@ -102,7 +103,7 @@ class LoginScreen extends StatelessWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 5,
+                spacing: context.width * 0.013,
                 children: [
                   Text(
                     'not_account',
@@ -120,7 +121,7 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
               Container(
-                margin: EdgeInsets.only(top: 10),
+                margin: EdgeInsets.only(top: context.height * 0.012),
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
@@ -131,7 +132,9 @@ class LoginScreen extends StatelessWidget {
                       thickness: 2,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: context.width * 0.043,
+                      ),
                       color: Theme.of(context).scaffoldBackgroundColor,
                       child: Text(
                         'or',
@@ -141,7 +144,12 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              GoogleBtn(text: 'login_google'),
+              GoogleBtn(
+                text: 'login_google',
+                onPressed: () {
+                  AuthService.continueWithGoogle(context);
+                },
+              ),
               SizedBox(),
             ],
           ),
@@ -153,46 +161,37 @@ class LoginScreen extends StatelessWidget {
   void login(BuildContext context) async {
     if (formKey.currentState?.validate() == true) {
       try {
-        DialogUtils.showLoading(context: context, text: 'loading');
-        await Future.delayed(Duration(seconds: 2));
+        DialogUtils.showLoading(context: context, text: 'loading...');
         final credential = await FirebaseAuth.instance
             .signInWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
-        DialogUtils.hideLoading(context: context);
-        DialogUtils.showMessage(
-          context: context,
-          content: 'login_successfully',
-          title: 'login',
-          posActionsName: 'ok',
-          posAction: () {
-            Navigator.pushReplacementNamed(
-              context,
-              AppRoutes.homeRouteName,
+              email: emailController.text,
+              password: passwordController.text,
             );
-          },
+        var myUser = await FirebaseUtils.getUserInFirestore(
+          credential.user?.uid ?? '',
         );
+        if (myUser == null) {
+          return;
+        }
+        Provider.of<UserProvider>(context, listen: false).userUpdate(myUser);
+
+        DialogUtils.hideLoading(context: context);
+        ToastUtils.showToast(
+          text: 'login_successfully',
+          backgroundColor: Theme.of(context).primaryColor,
+        );
+        Navigator.pushReplacementNamed(context, AppRoutes.homeRouteName);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'invalid-credential') {
           DialogUtils.hideLoading(context: context);
-          DialogUtils.showMessage(
-            context: context,
-            content: 'no_user_found',
-            title: 'error',
-            posActionsName: 'ok',
-            isError: true,
+          ToastUtils.showToast(
+            text: 'no_user_found',
+            backgroundColor: AppColors.redColor,
           );
         }
       } catch (e) {
         DialogUtils.hideLoading(context: context);
-        DialogUtils.showMessage(
-          context: context,
-          content: '$e',
-          title: 'error',
-          posActionsName: 'ok',
-          isError: true,
-        );
+        ToastUtils.showToast(text: '$e', backgroundColor: AppColors.redColor);
       }
     }
   }

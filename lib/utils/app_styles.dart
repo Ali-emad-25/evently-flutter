@@ -24,15 +24,15 @@ class AppStyles {
     fontWeight: FontWeight.w500,
   );
 
-  static TextStyle semi20Black = TextStyle(
+  static TextStyle semi23Black = TextStyle(
     color: AppColors.blackColor,
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
+    fontSize: 23,
+    fontWeight: FontWeight.w700,
   );
-  static TextStyle semi20White = TextStyle(
+  static TextStyle semi23White = TextStyle(
     color: AppColors.whiteColor,
-    fontSize: 20,
-    fontWeight: FontWeight.w600,
+    fontSize: 23,
+    fontWeight: FontWeight.w700,
   );
 
   static TextStyle reg14Gray = TextStyle(
@@ -93,14 +93,9 @@ class AppStyles {
     fontWeight: FontWeight.w500,
   );
 
-  static TextStyle medium18MainLight = TextStyle(
-    color: AppColors.mainLightModeColor,
+  static TextStyle medium20Black = TextStyle(
+    color: AppColors.blackColor,
     fontSize: 18,
-    fontWeight: FontWeight.w500,
-  );
-  static TextStyle medium18White = TextStyle(
-    color: AppColors.whiteColor,
-    fontSize: 20,
     fontWeight: FontWeight.w500,
   );
 
@@ -124,5 +119,16 @@ class AppStyles {
     color: AppColors.whiteColor,
     fontSize: 24,
     fontWeight: FontWeight.w600,
+  );
+
+  static TextStyle medium16LightGray = TextStyle(
+    color: AppColors.disableColor,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle medium16Gray = TextStyle(
+    color: AppColors.grayColor,
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
   );
 }

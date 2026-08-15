@@ -1,8 +1,12 @@
 import 'package:evently/providers/theme_provider.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/ui/home/tabs/profile_tab/widgets/tile_list_widget.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
+import 'package:evently/utils/app_routes.dart';
+import 'package:evently/utils/dialog_utils.dart';
 import 'package:evently/utils/size_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +23,7 @@ class _ProfileTabState extends State<ProfileTab> {
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
+    var userProvider = Provider.of<UserProvider>(context);
     return Padding(
       padding: EdgeInsets.only(
         top: context.height * 0.075,
@@ -36,18 +41,18 @@ class _ProfileTabState extends State<ProfileTab> {
             spacing: context.height * 0.006,
             children: [
               Text(
-                'Ali Emad',
+                userProvider.currentUser!.name,
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
               Text(
-                'aliemad25@gmail.com',
+                userProvider.currentUser!.email,
                 style: Theme.of(context).textTheme.labelMedium,
               ),
             ],
           ),
           SizedBox(height: context.height * 0.012),
           TileListWidget(
-            title: 'darkMode',
+            title: 'dark_mode',
             widget: Switch(
               trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
               inactiveThumbColor: AppColors.whiteColor,
@@ -78,7 +83,21 @@ class _ProfileTabState extends State<ProfileTab> {
           ),
           GestureDetector(
             onTap: () {
-              //   todo: logout
+              DialogUtils.showMessage(
+                context: context,
+                content: 'want_to_logout?',
+                title: 'logout',
+                posActionsName: 'yes',
+                negActionsName: 'no',
+                posAction: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoutes.loginRouteName,
+                    (route) => false,
+                  );
+                },
+              );
             },
             child: TileListWidget(
               title: 'logout',

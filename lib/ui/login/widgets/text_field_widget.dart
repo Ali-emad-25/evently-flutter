@@ -3,22 +3,29 @@ import 'package:evently/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 typedef OnValidator = String? Function(String?)?;
+typedef OnChanged = void Function(String)?;
 
 class TextFieldWidget extends StatefulWidget {
   String hintText;
-  String prefixIcon;
+  int? maxLines;
+  Widget? prefixIcon;
+  Widget? suffixIcon;
   bool isPasswordField;
   TextInputType textInputType;
   TextEditingController? controller;
   OnValidator? validator;
+  OnChanged? onChanged;
   TextFieldWidget({
     super.key,
     required this.hintText,
-    required this.prefixIcon,
+    this.prefixIcon,
+    this.suffixIcon,
     this.textInputType = TextInputType.text,
     this.isPasswordField = false,
     this.controller,
     this.validator,
+    this.maxLines = 1,
+    this.onChanged,
   });
 
   @override
@@ -31,12 +38,15 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: widget.onChanged,
       controller: widget.controller,
       obscureText: widget.isPasswordField ? obscure : false,
       keyboardType: widget.textInputType,
+      maxLines: widget.maxLines,
       style: Theme.of(context).textTheme.headlineMedium,
       cursorColor: Theme.of(context).primaryColor,
       decoration: InputDecoration(
+        errorStyle: TextStyle(color: AppColors.redColor, fontSize: 13),
         filled: true,
         fillColor: Theme.of(context).cardColor,
         hintText: widget.hintText.tr(),
@@ -49,7 +59,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         ),
         errorBorder: buildOutlineInputBorder(color: AppColors.redColor),
         focusedErrorBorder: buildOutlineInputBorder(color: AppColors.redColor),
-        prefixIcon: Image.asset(widget.prefixIcon),
+        prefixIcon: widget.prefixIcon,
         suffixIcon: widget.isPasswordField == true
             ? IconButton(
                 onPressed: () {
@@ -63,7 +73,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
                   color: AppColors.disableColor,
                 ),
               )
-            : SizedBox(),
+            : widget.suffixIcon,
       ),
       validator: widget.validator,
     );

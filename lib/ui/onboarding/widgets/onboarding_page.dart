@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:evently/providers/theme_provider.dart';
 import 'package:evently/utils/app_colors.dart';
+import 'package:evently/utils/size_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -29,9 +30,9 @@ class OnboardingPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 10,
+        spacing: context.height * 0.012,
         children: [
-          SizedBox(height: 20),
+          SizedBox(height: context.height * 0.025),
           Image.asset(
             themeProvider.isDarkMode ? imageDark : imageLight,
             width: double.infinity,
@@ -39,7 +40,7 @@ class OnboardingPage extends StatelessWidget {
           ),
           Container(
             alignment: .center,
-            padding: EdgeInsets.only(bottom: 10),
+            padding: EdgeInsets.only(bottom: context.height * 0.012),
             child: SmoothPageIndicator(
               controller: controller,
               count: count,
@@ -49,9 +50,9 @@ class OnboardingPage extends StatelessWidget {
                 dotColor: themeProvider.isDarkMode
                     ? AppColors.whiteColor
                     : AppColors.disableColor,
-                dotHeight: 8,
-                dotWidth: 8,
-                spacing: 6,
+                dotHeight: context.height * 0.01,
+                dotWidth: context.width * 0.02,
+                spacing: context.width * 0.016,
               ),
             ),
           ),

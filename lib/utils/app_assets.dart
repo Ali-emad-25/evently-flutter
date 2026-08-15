@@ -12,8 +12,6 @@ class AppAssets {
   static const String sportIcon = 'assets/icons/sport_icon.png';
   static const String birthdayIcon = 'assets/icons/birthday_icon.png';
   static const String bookIcon = 'assets/icons/book_icon.png';
-  static const String sportBgLight = 'assets/images/sport_bg_light.png';
-  static const String sportBgDark = 'assets/images/sport_bg_dark.png';
   static const String startBgLight = 'assets/images/start_bg_light.png';
   static const String startBgDark = 'assets/images/start_bg_dark.png';
   static const String logoLight = 'assets/images/logo_light.png';
@@ -32,10 +30,27 @@ class AppAssets {
       'assets/images/onboarding_image2_dark.png';
   static const String onboardingImage3Dark =
       'assets/images/onboarding_image3_dark.png';
-  static const String nameIcon = 'assets/icons/name_icon.png';
   static const String emailIcon = 'assets/icons/email_icon.png';
   static const String passwordIcon = 'assets/icons/password_icon.png';
   static const String googleLogo = 'assets/icons/google_logo.png';
   static const String forgetImage = 'assets/images/forget_image.png';
   static const String forgetImageDark = 'assets/images/forget_image_dark.png';
+
+  static const String sportBgLight = 'assets/images/sport_bg_light.png';
+  static const String sportBgDark = 'assets/images/sport_bg_dark.png';
+  static const String birthdayBgLight = 'assets/images/birthday_bg_light.png';
+  static const String birthdayBgDark = 'assets/images/birthday_bg_dark.png';
+  static const String bookClubBgLight = 'assets/images/book_club_bg_light.png';
+  static const String bookClubBgDark = 'assets/images/book_club_dark.png';
+  static const String meetingBgLight = 'assets/images/meeting_bg_light.png';
+  static const String meetingBgDark = 'assets/images/meeting_bg_dark.png';
+  static const String exhibitionBgLight =
+      'assets/images/exhibition_bg_light.png';
+  static const String exhibitionBgDark = 'assets/images/exhibition_bg_dark.png';
+
+  static const String calendarIcon = 'assets/icons/calendar_icon.png';
+  static const String clockIcon = 'assets/icons/clock_icon.png';
+
+  static const String trashIcon = 'assets/icons/trash_icon.png';
+  static const String editIcon = 'assets/icons/edit_icon.png';
 }

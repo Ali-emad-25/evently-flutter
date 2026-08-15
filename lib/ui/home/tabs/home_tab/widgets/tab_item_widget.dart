@@ -1,32 +1,26 @@
-import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
+import 'package:evently/utils/size_utils.dart';
 import 'package:flutter/material.dart';
 
 class TabItemWidget extends StatelessWidget {
   String eventName;
-  int eventIconIndex;
+  String icon;
   bool isSelected;
 
   TabItemWidget({
     super.key,
+    required this.icon,
     required this.eventName,
-    required this.eventIconIndex,
     required this.isSelected,
   });
-
-  List<String> eventsIconList = [
-    AppAssets.allIcon,
-    AppAssets.sportIcon,
-    AppAssets.birthdayIcon,
-    AppAssets.bookIcon,
-    AppAssets.bookIcon,
-    AppAssets.bookIcon,
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: EdgeInsets.symmetric(
+        vertical: context.height * 0.01,
+        horizontal: context.width * 0.035,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
@@ -40,10 +34,10 @@ class TabItemWidget extends StatelessWidget {
             : Theme.of(context).cardColor,
       ),
       child: Row(
-        spacing: 8,
+        spacing: context.width * 0.025,
         children: [
           Image.asset(
-            eventsIconList[eventIconIndex],
+            icon,
             color: isSelected
                 ? AppColors.whiteColor
                 : Theme.of(context).primaryColor,

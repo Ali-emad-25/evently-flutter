@@ -4,6 +4,8 @@ import 'package:evently/ui/home/tabs/home_tab/home_tab.dart';
 import 'package:evently/ui/home/tabs/profile_tab/profile_tab.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_colors.dart';
+import 'package:evently/utils/app_routes.dart';
+import 'package:evently/utils/size_utils.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // todo: Navigation to add screen
+          Navigator.pushNamed(context, AppRoutes.addRouteName);
         },
         backgroundColor: Theme.of(context).primaryColor,
         shape: CircleBorder(),
@@ -77,11 +79,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }) {
     return BottomNavigationBarItem(
       icon: Padding(
-        padding: const EdgeInsets.only(top: 8, bottom: 3),
+        padding: EdgeInsets.only(
+          top: context.height * 0.01,
+          bottom: context.height * 0.004,
+        ),
         child: Image.asset(icon, color: AppColors.disableColor),
       ),
       activeIcon: Padding(
-        padding: const EdgeInsets.only(top: 8, bottom: 3),
+        padding: EdgeInsets.only(
+          top: context.height * 0.01,
+          bottom: context.height * 0.004,
+        ),
         child: Image.asset(activeIcon, color: Theme.of(context).primaryColor),
       ),
       label: label.tr(),

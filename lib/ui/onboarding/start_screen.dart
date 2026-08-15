@@ -6,6 +6,7 @@ import 'package:evently/ui/onboarding/widgets/text_btn.dart';
 import 'package:evently/ui/onboarding/widgets/theme_btn.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_routes.dart';
+import 'package:evently/utils/size_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,17 +17,21 @@ class StartScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
     return Scaffold(
-      appBar: AppBar(toolbarHeight: 60, title: LogoWidget(), centerTitle: true),
+      appBar: AppBar(
+        toolbarHeight: context.height * 0.074,
+        title: LogoWidget(),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: context.width * 0.043),
           child: Column(
-            spacing: 10,
+            spacing: context.height * 0.012,
             children: [
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
-                    spacing: 10,
+                    spacing: context.height * 0.012,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.asset(
@@ -43,9 +48,9 @@ class StartScreen extends StatelessWidget {
                         'start_description',
                         style: Theme.of(context).textTheme.labelSmall,
                       ).tr(),
-                      SizedBox(height: 5),
+                      SizedBox(height: context.height * 0.0062),
                       Row(
-                        spacing: 10,
+                        spacing: context.width * 0.03,
                         children: [
                           Text(
                             'language',
@@ -67,7 +72,7 @@ class StartScreen extends StatelessWidget {
                         ],
                       ),
                       Row(
-                        spacing: 10,
+                        spacing: context.width * 0.03,
                         children: [
                           Text(
                             'theme',
