@@ -59,7 +59,8 @@ class DialogUtils {
       );
     }
     if (negActionsName != null) {
-      actions.add(
+      actions.insert(
+        0,
         TextButton(
           onPressed: () {
             Navigator.pop(context);

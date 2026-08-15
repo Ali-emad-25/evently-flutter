@@ -26,17 +26,18 @@ class AppTheme {
     dividerColor: AppColors.dividerLightColor,
     primaryColor: AppColors.mainLightModeColor,
     textTheme: TextTheme(
-      headlineLarge: AppStyles.semi20Black,
+      headlineLarge: AppStyles.semi23Black,
       headlineMedium: AppStyles.simi16MainLight,
       headlineSmall: AppStyles.medium14Black,
       labelLarge: AppStyles.medium16Black,
       labelMedium: AppStyles.reg14DarkGray,
       labelSmall: AppStyles.reg16DarkGray,
-      bodyLarge: AppStyles.medium18MainLight,
+      bodyLarge: AppStyles.medium20Black,
       bodyMedium: AppStyles.simi14MainLight,
       titleLarge: AppStyles.simi24MainLight,
       titleMedium: AppStyles.medium16MainLight,
       titleSmall: AppStyles.simi14MainLight,
+      bodySmall: AppStyles.medium16LightGray,
     ),
   );
 
@@ -63,17 +64,18 @@ class AppTheme {
     dividerColor: AppColors.dividerDarkColor,
     primaryColor: AppColors.mainDarkModeColor,
     textTheme: TextTheme(
-      headlineLarge: AppStyles.semi20White,
+      headlineLarge: AppStyles.semi23White,
       headlineMedium: AppStyles.simi16MainDark,
       headlineSmall: AppStyles.medium14White,
       labelLarge: AppStyles.medium16White,
       labelMedium: AppStyles.reg14Gray,
       labelSmall: AppStyles.reg16Gray,
-      bodyLarge: AppStyles.medium18White,
+      bodyLarge: AppStyles.medium20White,
       bodyMedium: AppStyles.simi14White,
       titleLarge: AppStyles.simi24White,
       titleMedium: AppStyles.medium16MainDark,
       titleSmall: AppStyles.simi14MainDark,
+      bodySmall: AppStyles.medium16Gray,
     ),
   );
 }

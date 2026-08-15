@@ -1,4 +1,6 @@
+import 'package:evently/firebase_utils.dart';
 import 'package:evently/models/onboarding_model.dart';
+import 'package:evently/providers/user_provider.dart';
 import 'package:evently/ui/onboarding/widgets/back_btn.dart';
 import 'package:evently/ui/onboarding/widgets/logo_widget.dart';
 import 'package:evently/ui/onboarding/widgets/main_btn.dart';
@@ -6,7 +8,12 @@ import 'package:evently/ui/onboarding/widgets/onboarding_page.dart';
 import 'package:evently/ui/onboarding/widgets/text_btn.dart';
 import 'package:evently/utils/app_assets.dart';
 import 'package:evently/utils/app_routes.dart';
+import 'package:evently/utils/dialog_utils.dart';
+import 'package:evently/utils/size_utils.dart';
+import 'package:evently/utils/toast_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class OnboardingScreen extends StatefulWidget {
   OnboardingScreen({super.key});
@@ -45,7 +52,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leadingWidth: 65,
+        leadingWidth: context.width * 0.17,
         leading: Visibility(
           visible: currentPage != 0,
           child: BackBtn(
@@ -78,9 +85,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         actionsPadding: EdgeInsets.symmetric(horizontal: 16),
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: context.width * 0.043),
         child: Column(
-          spacing: 10,
+          spacing: context.height * 0.012,
           children: [
             Expanded(
               child: PageView.builder(
@@ -106,12 +113,42 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               text: currentPage == pagesList.length - 1
                   ? 'get_started'
                   : 'next',
-              onPressed: () {
+              onPressed: () async {
                 if (currentPage == pagesList.length - 1) {
-                  Navigator.pushReplacementNamed(
-                    context,
-                    AppRoutes.loginRouteName,
-                  );
+                  if (FirebaseAuth.instance.currentUser != null) {
+                    DialogUtils.showLoading(
+                        context: context, text: 'loading...');
+
+                    final firebaseUser = FirebaseAuth.instance.currentUser!;
+
+                    final myUser = await FirebaseUtils.getUserInFirestore(
+                      firebaseUser.uid,
+                    );
+
+                    if (myUser != null) {
+                      Provider.of<UserProvider>(
+                        context,
+                        listen: false,
+                      ).userUpdate(myUser);
+
+                      DialogUtils.hideLoading(context: context);
+                      ToastUtils.showToast(
+                        text: 'login_successfully',
+                        backgroundColor: Theme
+                            .of(context)
+                            .primaryColor,
+                      );
+                      Navigator.pushReplacementNamed(
+                        context,
+                        AppRoutes.homeRouteName,
+                      );
+                    }
+                  } else {
+                    Navigator.pushReplacementNamed(
+                      context,
+                      AppRoutes.loginRouteName,
+                    );
+                  }
                 } else {
                   controller.nextPage(
                     duration: Duration(milliseconds: 300),
